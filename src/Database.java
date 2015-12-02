@@ -1,7 +1,7 @@
 import java.util.Hashtable;
 import java.sql.*;
 
-//Dette er en test
+//Test test
 
 public class Database {
 
