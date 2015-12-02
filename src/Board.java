@@ -6,6 +6,8 @@ Vi kan lave flere constructorer, hvor vi kræver andet end Hashtable
 F.eks. int, array osv.
 */
 
+//blabla
+
 public class Board {
 
     int id;
