@@ -1,6 +1,8 @@
 import java.util.Hashtable;
 import java.sql.*;
 
+//Dette er en test
+
 public class Database {
 
     //JDBC-felter
