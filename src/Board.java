@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Set;
 
 /*
 Vi kan lave flere constructorer, hvor vi kræver andet end Hashtable
@@ -29,27 +31,30 @@ public class Board {
         System.out.println(logMessage);
     }
 
-    public void newPlayer (Hashtable playerList){
+    public void newPlayer (Hashtable allPlayerData){
+        //For at få adgang til det enkelte player hashtable uden at kende deres ID
+        Set s = allPlayerData.entrySet();
+        Iterator it = s.iterator();
 
-        Player player = new Player(
-                (int)playerList.get("id"),
-                (String)playerList.get("name"),
-                (int)playerList.get("x"),
-                (int)playerList.get("y"),
-                (int)playerList.get("z"),
-                (int)playerList.get("width"),
-                (int)playerList.get("height"),
-                (int)playerList.get("depth"),
-                (int)playerList.get("weight"),
-                (int)playerList.get("speed"),
-                (int)playerList.get("acceleration"),
-                (int)playerList.get("health"),
-                (int)playerList.get("yaw"),
-                (int)playerList.get("pitch"),
-                (int)playerList.get("roll"));
-
-        for(player : playerList){
-
+        while(it.hasNext()) {
+            Hashtable playerData = (Hashtable)it.next();//Fuck up waiting....Tror ikke vi må typecaste sådan
+            Player player = new Player(
+                    (int) playerData.get("id"),
+                    (String) playerData.get("name"),
+                    (int) playerData.get("x"),
+                    (int) playerData.get("y"),
+                    (int) playerData.get("z"),
+                    (int) playerData.get("width"),
+                    (int) playerData.get("height"),
+                    (int) playerData.get("depth"),
+                    (int) playerData.get("weight"),
+                    (int) playerData.get("speed"),
+                    (int) playerData.get("acceleration"),
+                    (int) playerData.get("health"),
+                    (int) playerData.get("yaw"),
+                    (int) playerData.get("pitch"),
+                    (int) playerData.get("roll"));
+            pieceList.add(player);
         }
 
     }

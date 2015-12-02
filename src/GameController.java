@@ -29,13 +29,13 @@ public class GameController {
         }
 
         //SQL
-        Hashtable playerList = database.getOnlyPlayers();
+        Hashtable allPlayerData = database.getOnlyPlayers();
         Hashtable moveableList = database.getOnlyMoveable(); //Players ekskluderet
         Hashtable Pieces = database.getOnlyPieces(); //Players og Moveable ekskluderet
 
         //TODO smid data over i board
         //evt. board.add();
-        board.newPlayer(playerList);
+        board.newPlayer(allPlayerData);
 
     }
 
