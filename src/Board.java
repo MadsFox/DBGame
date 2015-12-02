@@ -29,4 +29,28 @@ public class Board {
         System.out.println(logMessage);
     }
 
+    public void newPlayer (Hashtable playerList){
+
+        Player player = new Player(
+                (int)playerList.get("id"),
+                (String)playerList.get("name"),
+                (int)playerList.get("x"),
+                (int)playerList.get("y"),
+                (int)playerList.get("z"),
+                (int)playerList.get("width"),
+                (int)playerList.get("height"),
+                (int)playerList.get("depth"),
+                (int)playerList.get("weight"),
+                (int)playerList.get("speed"),
+                (int)playerList.get("acceleration"),
+                (int)playerList.get("health"),
+                (int)playerList.get("yaw"),
+                (int)playerList.get("pitch"),
+                (int)playerList.get("roll"));
+
+        for(player : playerList){
+
+        }
+
+    }
 }

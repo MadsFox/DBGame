@@ -35,7 +35,7 @@ public class GameController {
 
         //TODO smid data over i board
         //evt. board.add();
-
+        board.newPlayer(playerList);
 
     }
 

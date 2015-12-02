@@ -85,8 +85,57 @@ public class Database {
     }
 
     public Hashtable getOnlyPlayers() {
-        String SQL = "SELECT pieces.id, x, y, z, width, height, depth, speed, acceleration, weight, name, roll, pitch, yaw FROM pieces, moveable, players WHERE moveable.id = pieces.id AND players.id = moveable.id";
 
+        //Forsøg at opret et statement
+        try {
+            Statement statement = connection.createStatement();
+
+            //SQL-sætning / Syntax
+            String SQL = "SELECT pieces.id, x, y, z, width, height, depth, speed, acceleration, weight, name, roll, pitch, yaw FROM pieces, moveable, players WHERE moveable.id = pieces.id AND players.id = moveable.id";
+            //Lav et ResultSet
+            try {
+                ResultSet playerDataSQL = statement.executeQuery(SQL);
+                Hashtable allPlayerdata = new Hashtable();
+
+                //Loop igennem alle rækkerne, der er gemt i playerData
+                //Vi forventer at lykken KUN kører 1 gang.
+
+                while(playerDataSQL.next()) {
+                    Hashtable playerData = new Hashtable();
+                    playerData.put("id", playerDataSQL.getInt("id"));
+                    playerData.put("name", playerDataSQL.getString("name"));
+                    playerData.put("x", playerDataSQL.getInt("x"));
+                    playerData.put("y", playerDataSQL.getInt("y"));
+                    playerData.put("z", playerDataSQL.getInt("z"));
+                    playerData.put("width", playerDataSQL.getInt("width"));
+                    playerData.put("height", playerDataSQL.getInt("height"));
+                    playerData.put("depth", playerDataSQL.getInt("depth"));
+                    playerData.put("speed", playerDataSQL.getInt("speed"));
+                    playerData.put("acceleration", playerDataSQL.getInt("acceleration"));
+                    playerData.put("weight", playerDataSQL.getInt("weight"));
+                    playerData.put("name", playerDataSQL.getInt("name"));
+                    playerData.put("roll", playerDataSQL.getInt("roll"));
+                    playerData.put("pitch", playerDataSQL.getInt("pitch"));
+                    playerData.put("yaw", playerDataSQL.getInt("yaw"));
+                    allPlayerdata.put("" + playerDataSQL.getInt("id"), playerData);
+                }
+
+                //Luk statement igen, fordi det er sikkert en god idé
+                statement.close();
+
+                //Returnér Hashtable data, som indeholder id, name, width osv.
+                log("Modtog board data fra DB: " + allPlayerdata);
+
+                //TODO: Overvej om vi skal tjekke om data er et tomt Hashtable
+                return allPlayerdata;
+            }
+            catch (SQLException e) {
+                log("Fejl i udførelse af query: " + e);
+            }
+        }
+        catch (SQLException e) {
+            log("Fejl ved oprettelse af SQL-statement: " + e);
+        }
         return onlyPlayers;
     }
 
