@@ -58,4 +58,46 @@ public class Board {
         }
 
     }
+
+    public void newMoveablePieces(Hashtable allMoveData){
+        //For at få adgang til det enkelte player hashtable uden at kende deres ID
+        Set s = allMoveData.entrySet();
+        Iterator it = s.iterator();
+
+        while(it.hasNext()) {
+            Hashtable moveData = (Hashtable)it.next();//Fuck up waiting....Tror ikke vi må typecaste sådan
+            Moveable move = new Moveable(
+                    (int) moveData.get("id"),
+                    (int) moveData.get("x"),
+                    (int) moveData.get("y"),
+                    (int) moveData.get("z"),
+                    (int) moveData.get("width"),
+                    (int) moveData.get("height"),
+                    (int) moveData.get("depth"),
+                    (int) moveData.get("weight"),
+                    (int) moveData.get("speed"),
+                    (int) moveData.get("acceleration"),
+                    (int) moveData.get("health"));
+            pieceList.add(move);
+        }
+    }
+
+    public void newPieces(Hashtable allPieceData){
+        //For at få adgang til det enkelte player hashtable uden at kende deres ID
+        Set s = allPieceData.entrySet();
+        Iterator it = s.iterator();
+
+        while(it.hasNext()) {
+            Hashtable pieceData = (Hashtable)it.next();//Fuck up waiting....Tror ikke vi må typecaste sådan
+            Piece piece = new Piece(
+                    (int) pieceData.get("id"),
+                    (int) pieceData.get("x"),
+                    (int) pieceData.get("y"),
+                    (int) pieceData.get("z"),
+                    (int) pieceData.get("width"),
+                    (int) pieceData.get("height"),
+                    (int) pieceData.get("depth"));
+            pieceList.add(piece);
+        }
+    }
 }
