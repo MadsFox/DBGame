@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.Hashtable;
 import java.sql.*;
 
@@ -87,165 +88,128 @@ public class Database {
     }
 
     public Hashtable getOnlyPlayers() {
+        Hashtable players = new Hashtable();
 
-        //Forsøg at opret et statement
         try {
             Statement statement = connection.createStatement();
-
-            //SQL-sætning / Syntax
             String SQL = "SELECT pieces.id, x, y, z, width, height, depth, speed, acceleration, weight, name, roll, pitch, yaw FROM pieces, moveable, players WHERE moveable.id = pieces.id AND players.id = moveable.id";
-            //Lav et ResultSet
-            try {
-                ResultSet playerDataSQL = statement.executeQuery(SQL);
-                Hashtable allPlayerdata = new Hashtable();
 
-                //Loop igennem alle rækkerne, der er gemt i playerData
-                //Vi forventer at lykken KUN kører 1 gang.
+            ResultSet playerData = statement.executeQuery(SQL);
 
-                while(playerDataSQL.next()) {
-                    Hashtable playerData = new Hashtable();
-                    playerData.put("id", playerDataSQL.getInt("id"));
-                    playerData.put("name", playerDataSQL.getString("name"));
-                    playerData.put("x", playerDataSQL.getInt("x"));
-                    playerData.put("y", playerDataSQL.getInt("y"));
-                    playerData.put("z", playerDataSQL.getInt("z"));
-                    playerData.put("width", playerDataSQL.getInt("width"));
-                    playerData.put("height", playerDataSQL.getInt("height"));
-                    playerData.put("depth", playerDataSQL.getInt("depth"));
-                    playerData.put("speed", playerDataSQL.getInt("speed"));
-                    playerData.put("acceleration", playerDataSQL.getInt("acceleration"));
-                    playerData.put("weight", playerDataSQL.getInt("weight"));
-                    playerData.put("name", playerDataSQL.getInt("name"));
-                    playerData.put("roll", playerDataSQL.getInt("roll"));
-                    playerData.put("pitch", playerDataSQL.getInt("pitch"));
-                    playerData.put("yaw", playerDataSQL.getInt("yaw"));
-                    allPlayerdata.put("" + playerDataSQL.getInt("id"), playerData);
-                }
+            //change
+            //Vi looper igennem playerData (som forhåbentligt indeholder  nogle rækker=
+            while(playerData.next()) {
 
-                //Luk statement igen, fordi det er sikkert en god idé
-                statement.close();
+                //Vi gemmer denne række i et Hashtable, som vi kalder playerRow. Derefter smider vi playerRow ind i vores players
+                Hashtable playerRow = new Hashtable();
 
-                //Returnér Hashtable data, som indeholder id, name, width osv.
-                log("Modtog board data fra DB: " + allPlayerdata);
+                //TODO sæt id, x, y, z ind i array og loop igennem array.
 
-                //TODO: Overvej om vi skal tjekke om data er et tomt Hashtable
-                return allPlayerdata;
+                int id = playerData.getInt("id");
+                playerRow.put("id", id);
+                playerRow.put("x", playerData.getInt("x"));
+                playerRow.put("y", playerData.getInt("y"));
+                playerRow.put("z", playerData.getInt("z"));
+                playerRow.put("width", playerData.getInt("width"));
+                playerRow.put("height", playerData.getInt("height"));
+                playerRow.put("depth", playerData.getInt("depth"));
+                playerRow.put("speed", playerData.getInt("speed"));
+                playerRow.put("acceleration", playerData.getInt("acceleration"));
+                playerRow.put("weight", playerData.getInt("weight"));
+                playerRow.put("name", playerData.getString("name"));
+                playerRow.put("roll", playerData.getInt("roll"));
+                playerRow.put("pitch", playerData.getInt("pitch"));
+                playerRow.put("yaw", playerData.getInt("yaw"));
+
+                players.put(id, playerRow);
             }
-            catch (SQLException e) {
-                log("Fejl i udførelse af query: " + e);
-            }
+
         }
         catch (SQLException e) {
-            log("Fejl ved oprettelse af SQL-statement: " + e);
+            log("sql fejl: " + e);
         }
-        return onlyPlayers;
+
+        return players;
     }
 
     public Hashtable getOnlyMoveable() {
-        //Forsøg at opret et statement
+        Hashtable moveables = new Hashtable();
+
         try {
             Statement statement = connection.createStatement();
+            String SQL = "SELECT pieces.id, x, y, z, width, height, depth, speed, acceleration, weight FROM pieces, moveable WHERE pieces.id = moveable.id AND pieces.id NOT IN (SELECT id FROM players)";
 
-            //SQL-sætning / Syntax
-            String MoveSQL = "SELECT pieces.id, x, y, z, width, height, depth, speed, acceleration, weight FROM pieces, moveable, players WHERE moveable.id = pieces.id AND players.id != moveable.id";
-            //Lav et ResultSet
-            try {
-                ResultSet moveDataSQL = statement.executeQuery(MoveSQL);
-                Hashtable allMovedata = new Hashtable();
+            ResultSet moveableData = statement.executeQuery(SQL);
 
-                //Loop igennem alle rækkerne, der er gemt i playerData
-                //Vi forventer at lykken KUN kører 1 gang.
+            //change
+            //Vi looper igennem playerData (som forhåbentligt indeholder  nogle rækker=
+            while(moveableData.next()) {
 
-                while(moveDataSQL.next()) {
-                    Hashtable moveData = new Hashtable();
-                    moveData.put("id", moveDataSQL.getInt("id"));
-                    moveData.put("name", moveDataSQL.getString("name"));
-                    moveData.put("x", moveDataSQL.getInt("x"));
-                    moveData.put("y", moveDataSQL.getInt("y"));
-                    moveData.put("z", moveDataSQL.getInt("z"));
-                    moveData.put("width", moveDataSQL.getInt("width"));
-                    moveData.put("height", moveDataSQL.getInt("height"));
-                    moveData.put("depth", moveDataSQL.getInt("depth"));
-                    moveData.put("speed", moveDataSQL.getInt("speed"));
-                    moveData.put("acceleration", moveDataSQL.getInt("acceleration"));
-                    moveData.put("weight", moveDataSQL.getInt("weight"));
-                    moveData.put("name", moveDataSQL.getInt("name"));
-                    moveData.put("roll", moveDataSQL.getInt("roll"));
-                    moveData.put("pitch", moveDataSQL.getInt("pitch"));
-                    moveData.put("yaw", moveDataSQL.getInt("yaw"));
-                    allMovedata.put("" + moveDataSQL.getInt("id"), moveData);
-                }
+                //Vi gemmer denne række i et Hashtable, som vi kalder playerRow. Derefter smider vi playerRow ind i vores players
+                Hashtable moveableRow = new Hashtable();
 
-                //Luk statement igen, fordi det er sikkert en god idé
-                statement.close();
+                //TODO sæt id, x, y, z ind i array og loop igennem array.
 
-                //Returnér Hashtable data, som indeholder id, name, width osv.
-                log("Modtog board data fra DB: " + allMovedata);
+                int id = moveableData.getInt("id");
+                moveableRow.put("id", id);
+                moveableRow.put("x", moveableData.getInt("x"));
+                moveableRow.put("y", moveableData.getInt("y"));
+                moveableRow.put("z", moveableData.getInt("z"));
+                moveableRow.put("width", moveableData.getInt("width"));
+                moveableRow.put("height", moveableData.getInt("height"));
+                moveableRow.put("depth", moveableData.getInt("depth"));
+                moveableRow.put("speed", moveableData.getInt("speed"));
+                moveableRow.put("acceleration", moveableData.getInt("acceleration"));
+                moveableRow.put("weight", moveableData.getInt("weight"));
 
-                //TODO: Overvej om vi skal tjekke om data er et tomt Hashtable
-                return allMovedata;
+                moveables.put(id, moveableRow);
             }
-            catch (SQLException e) {
-                log("Fejl i udførelse af query: " + e);
-            }
+
         }
         catch (SQLException e) {
-            log("Fejl ved oprettelse af SQL-statement: " + e);
+            log("moveable sql fejl: " + e);
         }
-        return onlyMoveable;
+
+        return moveables;
     }
+
 
     public Hashtable getOnlyPieces() {
+        Hashtable pieces = new Hashtable();
 
-        //Forsøg at opret et statement
         try {
             Statement statement = connection.createStatement();
+            String SQL = "SELECT id, x, y, z, width, height, depth FROM pieces WHERE id NOT IN (SELECT id FROM moveable)";
 
-            //SQL-sætning / Syntax
-            String PieceSQL = "SELECT pieces.id, x, y, z, width, height, depth FROM pieces, moveable WHERE moveable.id != pieces.id";
-            //Lav et ResultSet
-            try {
-                ResultSet moveDataSQL = statement.executeQuery(PieceSQL);
-                Hashtable allPiecedata = new Hashtable();
+            ResultSet pieceData = statement.executeQuery(SQL);
 
-                //Loop igennem alle rækkerne, der er gemt i playerData
-                //Vi forventer at lykken KUN kører 1 gang.
+            //change
+            //Vi looper igennem playerData (som forhåbentligt indeholder  nogle rækker=
+            while(pieceData.next()) {
 
-                while(moveDataSQL.next()) {
-                    Hashtable pieceData = new Hashtable();
-                    pieceData.put("id", moveDataSQL.getInt("id"));
-                    pieceData.put("name", moveDataSQL.getString("name"));
-                    pieceData.put("x", moveDataSQL.getInt("x"));
-                    pieceData.put("y", moveDataSQL.getInt("y"));
-                    pieceData.put("z", moveDataSQL.getInt("z"));
-                    pieceData.put("width", moveDataSQL.getInt("width"));
-                    pieceData.put("height", moveDataSQL.getInt("height"));
-                    pieceData.put("depth", moveDataSQL.getInt("depth"));
-                    pieceData.put("speed", moveDataSQL.getInt("speed"));
-                    pieceData.put("acceleration", moveDataSQL.getInt("acceleration"));
-                    pieceData.put("weight", moveDataSQL.getInt("weight"));
-                    pieceData.put("name", moveDataSQL.getInt("name"));
-                    pieceData.put("roll", moveDataSQL.getInt("roll"));
-                    pieceData.put("pitch", moveDataSQL.getInt("pitch"));
-                    pieceData.put("yaw", moveDataSQL.getInt("yaw"));
-                    allPiecedata.put("" + moveDataSQL.getInt("id"), pieceData);
-                }
+                //Vi gemmer denne række i et Hashtable, som vi kalder playerRow. Derefter smider vi playerRow ind i vores players
+                Hashtable pieceRow = new Hashtable();
 
-                //Luk statement igen, fordi det er sikkert en god idé
-                statement.close();
+                //TODO sæt id, x, y, z ind i array og loop igennem array.
 
-                //Returnér Hashtable data, som indeholder id, name, width osv.
-                log("Modtog board data fra DB: " + allPiecedata);
+                int id = pieceData.getInt("id");
+                pieceRow.put("id", id);
+                pieceRow.put("x", pieceData.getInt("x"));
+                pieceRow.put("y", pieceData.getInt("y"));
+                pieceRow.put("z", pieceData.getInt("z"));
+                pieceRow.put("width", pieceData.getInt("width"));
+                pieceRow.put("height", pieceData.getInt("height"));
+                pieceRow.put("depth", pieceData.getInt("depth"));
 
-                //TODO: Overvej om vi skal tjekke om data er et tomt Hashtable
-                return allPiecedata;
+                pieces.put(id, pieceRow);
             }
-            catch (SQLException e) {
-                log("Fejl i udførelse af query: " + e);
-            }
+
         }
         catch (SQLException e) {
-            log("Fejl ved oprettelse af SQL-statement: " + e);
-        }return onlyPieces;
+            log("moveable sql fejl: " + e);
+        }
+
+        return pieces;
     }
+
 }
