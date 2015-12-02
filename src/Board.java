@@ -9,6 +9,7 @@ F.eks. int, array osv.
 */
 
 //Ændring
+//Hello
 
 public class Board {
 
