@@ -18,4 +18,5 @@ public class Piece {
         this.width= width;
         this.depth = depth;
     }
+
 }
