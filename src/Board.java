@@ -9,6 +9,7 @@ F.eks. int, array osv.
 */
 
 //Ændring
+//Hello
 
 public class Board {
 
@@ -102,4 +103,17 @@ public class Board {
             pieceList.add(piece);
         }
     }
+
+    public void syncronizePlayers(Hashtable players) {
+        System.out.println(players);
+    }
+
+    public void syncronizeMoveable(Hashtable moveable) {
+        System.out.println(moveable);
+    }
+
+    public void syncronizePieces(Hashtable pieces) {
+        System.out.println(pieces);
+    }
+
 }
